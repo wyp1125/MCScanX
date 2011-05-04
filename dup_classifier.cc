@@ -13,7 +13,7 @@ static char prefix_fn[LABEL_LEN];
 
 static void print_banner()
 {
-;
+    ;
 }
 
 static void init_opt()
@@ -49,8 +49,8 @@ static void print_help(const char *prg)
              " -e  E_VALUE, alignment significance (default: %lg)\n"
              " -u  UNIT_DIST, average intergenic distance (default: %d)\n"
              " -m  MAX_GAPS, maximum gaps allowed (default: %d)\n"
- //            " -a  only builds the pairwise blocks (.aligns file)\n"
- //            " -b  patterns of syntenic blocks. 0:intra- and inter-species (default); 1:intra-species; 2:inter-species\n"
+//            " -a  only builds the pairwise blocks (.aligns file)\n"
+//            " -b  patterns of syntenic blocks. 0:intra- and inter-species (default); 1:intra-species; 2:inter-species\n"
              " -h  print this help page\n",
              prg, MATCH_SCORE, GAP_PENALTY, MATCH_SIZE, E_VALUE,  UNIT_DIST, MAX_GAPS);
     exit(1);
@@ -81,15 +81,15 @@ static void read_opt(int argc, char *argv[])
         case 'u':
             UNIT_DIST = atoi(optarg);
             break;
-/*        case 'b':
-            IN_SYNTENY = atoi(optarg);
-            break;*/
+            /*        case 'b':
+                        IN_SYNTENY = atoi(optarg);
+                        break;*/
         case 'm':
             MAX_GAPS = atoi(optarg);
             break;
-/*        case 'a':
-            IS_PAIRWISE = true;
-            break;*/
+            /*        case 'a':
+                        IS_PAIRWISE = true;
+                        break;*/
         case '?':
             if (optopt=='k' || optopt=='s' || optopt=='g' || optopt=='e' || optopt=='u' || optopt=='b' || optopt=='m')
                 errAbort("Option -%c requires an argument.", optopt);
@@ -138,22 +138,22 @@ int main(int argc, char *argv[])
 
     progress("%d alignments generated", (int) seg_list.size());
     cls_main(prefix_fn);
-/*
-    print_align(fw);
-    fclose(fw);
-    uglyTime("Pairwise synteny written to %s", align_fn);
+    /*
+        print_align(fw);
+        fclose(fw);
+        uglyTime("Pairwise synteny written to %s", align_fn);
 
-    if (IS_PAIRWISE) return 0;
-    printf("Writing multiple syntenic blocks to HTML files\n");
-    sprintf(html_fn,"%s.html",prefix_fn);
-    if(chdir(html_fn)<0)
-    {
-    mkdir(html_fn,S_IRWXU|S_IRGRP|S_IXGRP);
-    chdir(html_fn);
-    }
-    msa_main();
-    uglyTime("Done!");
-*/
+        if (IS_PAIRWISE) return 0;
+        printf("Writing multiple syntenic blocks to HTML files\n");
+        sprintf(html_fn,"%s.html",prefix_fn);
+        if(chdir(html_fn)<0)
+        {
+        mkdir(html_fn,S_IRWXU|S_IRGRP|S_IXGRP);
+        chdir(html_fn);
+        }
+        msa_main();
+        uglyTime("Done!");
+    */
     return 0;
 }
 

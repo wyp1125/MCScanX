@@ -24,10 +24,10 @@ vector<Blast_record> match_list;
 
 struct Gene_feat
 {
-string name;
-string mol;
-int mid;
-int geneid;
+    string name;
+    string mol;
+    int mid;
+    int geneid;
     bool operator < (const Gene_feat &g) const
     {
         return (mol == g.mol && mid < g.mid) || mol < g.mol;
@@ -42,29 +42,29 @@ struct geneCmp
 };
 struct tandem_pair
 {
-string gene1,gene2;
-string sp;
-string mol;
-int id;
-bool operator <  (const tandem_pair &g) const
-{
-return (mol == g.mol && id < g.id) || mol < g.mol;
-}
+    string gene1,gene2;
+    string sp;
+    string mol;
+    int id;
+    bool operator <  (const tandem_pair &g) const
+    {
+        return (mol == g.mol && id < g.id) || mol < g.mol;
+    }
 };
 
 struct tandem_array
 {
-vector<string> gene;
-string mol;
-string sp;
+    vector<string> gene;
+    string mol;
+    string sp;
 };
 
 struct tandem_cluster
 {
-string anchor1;
-string anchor2;
-int array_id1;
-int array_id2;
+    string anchor1;
+    string anchor2;
+    int array_id1;
+    int array_id2;
 };
 
 vector <tandem_pair> alltandempair;

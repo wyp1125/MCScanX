@@ -4,14 +4,14 @@
 
 struct New_endpoint
 {
-Gene_feat *n;
-int index;
-bool start;
-Gene_feat *e;
-bool operator <  (const New_endpoint &g) const
-{
-return (n->mol == g.n->mol && n->mid < g.n->mid) || n->mol < g.n->mol;
-}
+    Gene_feat *n;
+    int index;
+    bool start;
+    Gene_feat *e;
+    bool operator <  (const New_endpoint &g) const
+    {
+        return (n->mol == g.n->mol && n->mid < g.n->mid) || n->mol < g.n->mol;
+    }
 };
 /*
 struct more_feat

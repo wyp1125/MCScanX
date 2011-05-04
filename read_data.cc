@@ -32,7 +32,7 @@ static bool cmp_ev (const Score_t& t1, const Score_t& t2)
 // both be present in the mcl output file and in the same group
 void read_blast(const char *prefix_fn, bool gff_flag=true)
 {
-    
+
     char fn[LABEL_LEN], g1[LABEL_LEN], g2[LABEL_LEN];
     sprintf(fn,"%s.blast",prefix_fn);
     ifstream in(fn);
@@ -43,39 +43,56 @@ void read_blast(const char *prefix_fn, bool gff_flag=true)
     map<string, double>blast_map;
     map<string, double>::iterator it;
     cout<<"Reading BLAST file and pre-processing"<<endl;
-    while(!in.eof())
+    while (!in.eof())
     {
-    getline(in,line);
-    if(line=="")
-    break;
-    istringstream test(line);
-    getline(test,gene1,'\t');
+        getline(in,line);
+        if (line=="")
+            break;
+        istringstream test(line);
+        getline(test,gene1,'\t');
 //    gene1=word;
-    getline(test,gene2,'\t');
+        getline(test,gene2,'\t');
 //    gene2=word;
-    getline(test,word,'\t');getline(test,word,'\t');getline(test,word,'\t');getline(test,word,'\t');getline(test,word,'\t');getline(test,word,'\t');getline(test,word,'\t');getline(test,word,'\t');
-    getline(test,word,'\t');
-    istringstream double_iss(word);
-    double_iss>>evalue;
-    i=gene1.compare(gene2);
-    if(i==0)
-    { continue; }
-    else if(i<0)
-    { geneids=gene1+"&"+gene2; }
-    else
-    { geneids=gene2+"&"+gene1; }
-    it = blast_map.find(geneids);
-    if(it==blast_map.end())
-    { blast_map[geneids]=evalue; }
-    else
-    {
-    if(evalue<it->second)
-    { it->second=evalue; }
-    }
-    total_num++;
+        getline(test,word,'\t');
+        getline(test,word,'\t');
+        getline(test,word,'\t');
+        getline(test,word,'\t');
+        getline(test,word,'\t');
+        getline(test,word,'\t');
+        getline(test,word,'\t');
+        getline(test,word,'\t');
+        getline(test,word,'\t');
+        istringstream double_iss(word);
+        double_iss>>evalue;
+        i=gene1.compare(gene2);
+        if (i==0)
+        {
+            continue;
+        }
+        else if (i<0)
+        {
+            geneids=gene1+"&"+gene2;
+        }
+        else
+        {
+            geneids=gene2+"&"+gene1;
+        }
+        it = blast_map.find(geneids);
+        if (it==blast_map.end())
+        {
+            blast_map[geneids]=evalue;
+        }
+        else
+        {
+            if (evalue<it->second)
+            {
+                it->second=evalue;
+            }
+        }
+        total_num++;
     }
     in.close();
- 
+
     double score;
     Blast_record br;
     int pair_id = 0;
@@ -83,54 +100,54 @@ void read_blast(const char *prefix_fn, bool gff_flag=true)
     map<string, Gene_feat>::iterator it1, it2;
     Gene_feat *gf1, *gf2;
     cout<<"Generating BLAST list"<<endl;
-    for(it=blast_map.begin();it!=blast_map.end();it++)
+    for (it=blast_map.begin();it!=blast_map.end();it++)
     {
-    istringstream test(it->first);
-    getline(test,gene1,'&');
-    getline(test,gene2,'&');
-    //total_num++;
-    it1 = gene_map.find(gene1);
-    it2 = gene_map.find(gene2);
-    if (it1==gene_map.end() || it2==gene_map.end()) continue;
-    gf1 = &(it1->second), gf2 = &(it2->second);
-    if (gf1->mol.empty() || gf2->mol.empty()) continue;
-    if (IN_SYNTENY==1 && gf1->mol.substr(0,2)!=gf2->mol.substr(0,2)) continue;
-    if (IN_SYNTENY==2 && gf1->mol.substr(0,2)==gf2->mol.substr(0,2)) continue;
+        istringstream test(it->first);
+        getline(test,gene1,'&');
+        getline(test,gene2,'&');
+        //total_num++;
+        it1 = gene_map.find(gene1);
+        it2 = gene_map.find(gene2);
+        if (it1==gene_map.end() || it2==gene_map.end()) continue;
+        gf1 = &(it1->second), gf2 = &(it2->second);
+        if (gf1->mol.empty() || gf2->mol.empty()) continue;
+        if (IN_SYNTENY==1 && gf1->mol.substr(0,2)!=gf2->mol.substr(0,2)) continue;
+        if (IN_SYNTENY==2 && gf1->mol.substr(0,2)==gf2->mol.substr(0,2)) continue;
 /////////////bug here/////////////////////////////////////////////////////////////
-i=gf1->mol.compare(gf2->mol);
+        i=gf1->mol.compare(gf2->mol);
 //////////////////////////////////////////////////////////////////////////////////
-if(i<0)
-{
-    br.gene1=gene1;
-    br.gene2=gene2;
-    br.mol_pair = gf1->mol+"&"+gf2->mol;
-}
-else if(i==0)
-{
-if(gf1->mid<=gf2->mid)
-{
-    br.gene1=gene1;
-    br.gene2=gene2;
-}
-else
-{
-    br.gene1=gene2;
-    br.gene2=gene1;
-}
-br.mol_pair = gf1->mol+"&"+gf2->mol;
-}
-else
-{
-    br.gene1=gene2;
-    br.gene2=gene1;
-    br.mol_pair = gf2->mol+"&"+gf1->mol;
-}
+        if (i<0)
+        {
+            br.gene1=gene1;
+            br.gene2=gene2;
+            br.mol_pair = gf1->mol+"&"+gf2->mol;
+        }
+        else if (i==0)
+        {
+            if (gf1->mid<=gf2->mid)
+            {
+                br.gene1=gene1;
+                br.gene2=gene2;
+            }
+            else
+            {
+                br.gene1=gene2;
+                br.gene2=gene1;
+            }
+            br.mol_pair = gf1->mol+"&"+gf2->mol;
+        }
+        else
+        {
+            br.gene1=gene2;
+            br.gene2=gene1;
+            br.mol_pair = gf2->mol+"&"+gf1->mol;
+        }
 //////////////////////////////////////////////////////////////////////////////////
-    mol_pairs[br.mol_pair]++;
+        mol_pairs[br.mol_pair]++;
 
-    br.pair_id = pair_id++;
-    br.score = it->second;
-    match_list.push_back(br);
+        br.pair_id = pair_id++;
+        br.score = it->second;
+        match_list.push_back(br);
 
     }
 

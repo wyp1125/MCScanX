@@ -53,19 +53,19 @@ struct Blast_record
 struct more_feat
 {
 //int gene_id;
-int tandem;
+    int tandem;
 //bool break_point;
-int depth;
+    int depth;
 };
 
 struct Gene_feat
-{   
+{
     vector<int> cursor;
     string name;
     string mol;
     int mid;
     int gene_id;
- //   more_feat *m;  
+//   more_feat *m;
     bool operator < (const Gene_feat &g) const
     {
         return (mol == g.mol && mid < g.mid) || mol < g.mol;

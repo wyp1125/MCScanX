@@ -13,7 +13,7 @@ static char prefix_fn[LABEL_LEN];
 
 static void print_banner()
 {
-;
+    ;
 }
 
 static void init_opt()
@@ -78,9 +78,9 @@ static void read_opt(int argc, char *argv[])
         case 'e':
             E_VALUE = atof(optarg);
             break;
-       // case 'p':
-       //     PIVOT = string(optarg);
-       //     break;
+            // case 'p':
+            //     PIVOT = string(optarg);
+            //     break;
         case 'u':
             UNIT_DIST = atoi(optarg);
             break;
@@ -147,10 +147,10 @@ int main(int argc, char *argv[])
     if (IS_PAIRWISE) return 0;
     printf("Writing multiple syntenic blocks to HTML files\n");
     sprintf(html_fn,"%s.html",prefix_fn);
-    if(chdir(html_fn)<0)
+    if (chdir(html_fn)<0)
     {
-    mkdir(html_fn,S_IRWXU|S_IRGRP|S_IXGRP);
-    chdir(html_fn);
+        mkdir(html_fn,S_IRWXU|S_IRGRP|S_IXGRP);
+        chdir(html_fn);
     }
     msa_main();
     uglyTime("Done!");
