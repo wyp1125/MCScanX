@@ -1,8 +1,7 @@
 /*
- * Author: Haibao Tang <bao@uga.edu> May 10, 2007
- * Main entry point for the executable mcscan
- *
- * Modified by Yupeng Wang, Mar 31, 2011
+ * Author: Yupeng Wang <wyp1125@uga.edu> March 31, 2011
+ * Program for classifying the duplicate genes of a genome into WGD, tandem, proximal and dispersed duplicates
+ * using MCScanX as a compoment
 */
 
 #include "dup_classifier.h"
@@ -48,11 +47,10 @@ static void print_help(const char *prg)
              "     (default: %d)\n"
              " -e  E_VALUE, alignment significance (default: %lg)\n"
              " -u  UNIT_DIST, average intergenic distance (default: %d)\n"
-             " -m  MAX_GAPS, maximum gaps allowed (default: %d)\n"
-//            " -a  only builds the pairwise blocks (.aligns file)\n"
-//            " -b  patterns of syntenic blocks. 0:intra- and inter-species (default); 1:intra-species; 2:inter-species\n"
+             " -m  MAX_GAPS, maximum gaps (one gap=UNIT_DIST) allowed (default: %d)\n"
+             " -n  N_PROXIMAL, maximum distance (# of genes) to call proximal (default: %d)\n"
              " -h  print this help page\n",
-             prg, MATCH_SCORE, GAP_PENALTY, MATCH_SIZE, E_VALUE,  UNIT_DIST, MAX_GAPS);
+             prg, MATCH_SCORE, GAP_PENALTY, MATCH_SIZE, E_VALUE,  UNIT_DIST, MAX_GAPS, N_PROXIMAL);
     exit(1);
 }
 
@@ -81,9 +79,9 @@ static void read_opt(int argc, char *argv[])
         case 'u':
             UNIT_DIST = atoi(optarg);
             break;
-            /*        case 'b':
-                        IN_SYNTENY = atoi(optarg);
-                        break;*/
+        case 'n':
+                        N_PROXIMAL = atoi(optarg);
+                        break;
         case 'm':
             MAX_GAPS = atoi(optarg);
             break;

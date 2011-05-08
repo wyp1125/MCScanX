@@ -9,7 +9,7 @@ use Getopt::Std;
 getopts("i:d:o:", \%options);
 if(! exists $options{i}||! exists $options{d} ||!exists $options{o})
 {
-print "Usage:\nPerl add_kaks_to_synteny.pl -i synteny_file -d cds_file -o output_file\n";
+print "Usage:\nperl add_kaks_to_synteny.pl -i synteny_file -d cds_file -o output_file\n";
 exit;
 }
 open(input0,$options{d}) or die "Cannot open cds_file!\n";

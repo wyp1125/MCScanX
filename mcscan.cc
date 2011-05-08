@@ -3,6 +3,7 @@
  * Main entry point for the executable mcscan
  *
  * Modified by Yupeng Wang, Mar 31, 2011
+ * The parameter MAX_GAPS was added. IN_SYNTENY has 3 choices and is functional.
 */
 
 #include "mcscan.h"
@@ -48,8 +49,8 @@ static void print_help(const char *prg)
              "     (default: %d)\n"
              " -e  E_VALUE, alignment significance (default: %lg)\n"
              " -u  UNIT_DIST, average intergenic distance (default: %d)\n"
-             " -m  MAX_GAPS, maximum gaps allowed (default: %d)\n"
-             " -a  only builds the pairwise blocks (.aligns file)\n"
+             " -m  MAX_GAPS, maximum gaps(one gap=UNIT_DIST) allowed (default: %d)\n"
+             " -a  only builds the pairwise blocks (.synteny file)\n"
              " -b  patterns of syntenic blocks. 0:intra- and inter-species (default); 1:intra-species; 2:inter-species\n"
              " -h  print this help page\n",
              prg, MATCH_SCORE, GAP_PENALTY, MATCH_SIZE, E_VALUE,  UNIT_DIST, MAX_GAPS);

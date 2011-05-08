@@ -7,6 +7,9 @@
  *
  * Do DP on dag of matches to get chains of matches
  * Changes made in the I/O section, the core chaining algorithm remains intact
+ * 
+ * Modified by Yupeng Wang <wyp1125@uga.edu> March 31, 2011
+ * GAP_PENATY can be set by users
  */
 
 #include "dagchainer.h"
@@ -140,8 +143,6 @@ static void print_chains(vector<Score_t>& score, const string &mol_pair)
                     /* gap penalty */
                     if (num_gaps > 0)
                         x +=num_gaps*GAP_PENALTY;
-                    //x -= pow(num_gaps,GAP_POWER);
-
                     if  (x > path_score[j])
                     {
                         path_score[j] = x;

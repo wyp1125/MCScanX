@@ -5,6 +5,7 @@
  * Also contains some helper functions for other data structures.
  *
  * Modified by Yupeng Wang, Mar 31, 2011
+ * Some functions were dropped in MCScanX
  */
 
 #include "out_utils.h"

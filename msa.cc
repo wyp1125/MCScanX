@@ -1,4 +1,6 @@
-
+/* Author: Yupeng Wang <wyp1125@uga.edu> March 31, 2011
+ * This is the new code for generating and printing multiple alignment based on progressive alignment 
+*/
 #include "msa.h"
 
 static vector <New_endpoint> endpoints;
@@ -213,7 +215,7 @@ void print_html()
             cout<<result_dir<<endl;
             result.open(result_dir,ios::out);
             result<<"<html><table cellspacing='0' cellpadding='0' align='left'>";
-            result<<"<tr align='center'><td># of blocks</td><td>PIVOT</td><td colspan='"<<2*max_level<<"'>Syntenic blocks</td></tr>"<<endl;
+            result<<"<tr align='center'><td># of blocks</td><td>PIVOT</td><td align='left' colspan='"<<2*max_level<<"'>&nbsp;&nbsp;Syntenic blocks</td></tr>"<<endl;
             prev_mol=n->mol;
 //cout<<prev_mol<<endl;
             i++;

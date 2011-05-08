@@ -6,8 +6,10 @@
  * Read MCL cluster, which is retrieved by clustering the above blast file
  * Read GFF file, which includes the chromosome, position information
 
- *Modified by Yupeng Wang, Mar 31, 2011
- *The part of reading MCL was removed
+ * Modified by Yupeng Wang, Mar 31, 2011
+ * Code related to MCL was removed
+ * Pre-processing BLAST was incorporated
+ * Gene matches can be filtered for intra-species and inter-species
  */
 
 
@@ -112,7 +114,7 @@ void read_blast(const char *prefix_fn, bool gff_flag=true)
         gf1 = &(it1->second), gf2 = &(it2->second);
         if (gf1->mol.empty() || gf2->mol.empty()) continue;
         if (IN_SYNTENY==1 && gf1->mol.substr(0,2)!=gf2->mol.substr(0,2)) continue;
-        if (IN_SYNTENY==2 && gf1->mol.substr(0,2)==gf2->mol.substr(0,2)) continue;
+//        if (IN_SYNTENY==2 && gf1->mol.substr(0,2)==gf2->mol.substr(0,2)) continue;
 /////////////bug here/////////////////////////////////////////////////////////////
         i=gf1->mol.compare(gf2->mol);
 //////////////////////////////////////////////////////////////////////////////////
@@ -143,6 +145,7 @@ void read_blast(const char *prefix_fn, bool gff_flag=true)
             br.mol_pair = gf2->mol+"&"+gf1->mol;
         }
 //////////////////////////////////////////////////////////////////////////////////
+        if(IN_SYNTENY!=2||gf1->mol.substr(0,2)!=gf2->mol.substr(0,2))
         mol_pairs[br.mol_pair]++;
 
         br.pair_id = pair_id++;
