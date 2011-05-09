@@ -31,21 +31,24 @@ Simply put MCscanX.zip into a directory and run::
   
 The following is the list of executable programs
 :::::::::::::::::::::::::::::::::::::::::::::::::
-Main programs (in the main folder)
--	MCScanX
--	Duplicate_gene_classifier
-Downstream analysis programs (in the downstream_analyses folder)
--	Tool 1. detect_syntenic_tandem_arrays
--	Tool 2. dissect_multiple_alignment	
--	Tool 3. dot_plotter.java
--	Tool 4. dual_synteny_plotter.java
--	Tool 5. circle_plotter.java
--	Tool 6. bar_plotter.java
--	Tool 7. add_kaks_to_synteny.pl
--	Tool 8. group_syntenic_genes.pl
--	Tool 9. detect_synteny_within_gene_families.pl
--	Tool 10. family_circle_plotter.java
--	Tool 11. origin_enrichment_analysis.pl
+**Main programs (in the main folder)**
+
+- MCScanX
+- Duplicate_gene_classifier
+
+**Downstream analysis programs (in the downstream_analyses folder)**
+
+- Tool 1. detect_syntenic_tandem_arrays
+- Tool 2. dissect_multiple_alignment	
+- Tool 3. dot_plotter.java
+- Tool 4. dual_synteny_plotter.java
+- Tool 5. circle_plotter.java
+- Tool 6. bar_plotter.java
+- Tool 7. add_kaks_to_synteny.pl
+- Tool 8. group_syntenic_genes.pl
+- Tool 9. detect_synteny_within_gene_families.pl
+- Tool 10. family_circle_plotter.java
+- Tool 11. origin_enrichment_analysis.pl
 
 Main programs
 --------------
@@ -57,12 +60,15 @@ This program, implementing a modified MCScan algorithm, detects syntenic blocks 
 - Usage
 MCscan2 reads in two data files: xyz.blast and xyz.gff. 
 The xyz.blast file is simply the direct BLASTP output of m8 format as following::
+
 	AT1G50920   AT1G50920    100.00  671     0       0       1       671     1       671     0.0     1316
   
 Here is a typical parameter setting for generating the xyz.blast file::
+
 	$blastall  -i  query_file  -d database -p blastp -e 1e-10 -b 5 -v 5 -m 8 -o xyz.blast
   
 The xyz.bed file holds gene positions, following a tab-delimited format::
+
 	chr#	starting_position	ending_position	gene
   
 Note: for chr#, a two-letter short name is used as prefix for the species; # is the chromosome number. (For example, the second chromosome of Arabidopsis thaliana should be denoted as at2.)
@@ -73,6 +79,7 @@ When comparing multiple genomes, simply concatenate all inter-/intra-species m8 
 
 It is advised that to make MCscanX generate more reasonable results, the number of BLASTP hits for a gene should be restricted to around top 5.
 When you have xyz.blast and xyz.gff ready, put them in the same folder. Then you can simply use::
+
 	$ ./MCScanx  dir/xyz
  
 ---Output
