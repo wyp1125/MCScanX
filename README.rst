@@ -21,7 +21,7 @@ Installation
 -------------
 
 Make
-:::::
+::::::
 Simply put MCscanX.zip into a directory and run::
 	$unzip MCscanx.zip
 	$cd MCScanx
