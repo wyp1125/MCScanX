@@ -53,6 +53,9 @@ The following is the list of executable programs
 Main programs
 --------------
 
+.. image:: https://lh4.ggpht.com/_O4Q4Y0oWQYU/Tcn3sydLaSI/AAAAAAAAA0w/foXv6yt4S2Y/s288/Figure1backup.jpg
+	:alt: MCScanX flow chart
+
 MCScanX
 ::::::::
 This program, implementing a modified MCScan algorithm, detects syntenic blocks and progressively aligns multiple syntenic blocks against reference genomes (PIVOT).
