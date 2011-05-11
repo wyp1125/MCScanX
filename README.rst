@@ -14,6 +14,8 @@ All programs are executed using command line options. Usage or help information 
 
 	$./program_name
 
+.. image:: https://lh4.ggpht.com/_O4Q4Y0oWQYU/Tcn3sydLaSI/AAAAAAAAA0w/foXv6yt4S2Y/s400/Figure1backup.jpg
+        :alt: MCScanX flow chart
  
 All code is copiable, distributable, modifiable, and usable without any restrictions.
 Contact: Yupeng Wang, wyp1125@uga.edu; Xu Tan, tanxu87@gmail.com
@@ -52,9 +54,6 @@ The following is the list of executable programs
 
 Main programs
 --------------
-
-.. image:: https://lh4.ggpht.com/_O4Q4Y0oWQYU/Tcn3sydLaSI/AAAAAAAAA0w/foXv6yt4S2Y/s400/Figure1backup.jpg
-	:alt: MCScanX flow chart
 
 MCScanX
 ::::::::
