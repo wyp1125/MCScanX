@@ -53,7 +53,7 @@ The following is the list of executable programs
 Main programs
 --------------
 
-.. image:: https://lh4.ggpht.com/_O4Q4Y0oWQYU/Tcn3sydLaSI/AAAAAAAAA0w/foXv6yt4S2Y/s288/Figure1backup.jpg
+.. image:: https://lh4.ggpht.com/_O4Q4Y0oWQYU/Tcn3sydLaSI/AAAAAAAAA0w/foXv6yt4S2Y/s400/Figure1backup.jpg
 	:alt: MCScanX flow chart
 
 MCScanX
