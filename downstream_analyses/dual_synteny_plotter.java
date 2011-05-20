@@ -6,8 +6,8 @@ import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 
 public class dual_synteny_plotter{
-Hashtable gene_feat;
-Hashtable chr_len;
+Hashtable<String, String> gene_feat; 
+Hashtable<String, String> chr_len;   
 Vector <Integer> index;
 Vector <String> gene1;
 Vector <String> gene2;
@@ -21,8 +21,8 @@ try{
   FileInputStream fstream = new FileInputStream(fpath);
   DataInputStream in = new DataInputStream(fstream);
   BufferedReader br = new BufferedReader(new InputStreamReader(in));
-  gene_feat=new Hashtable();
-  chr_len=new Hashtable();
+  gene_feat=new Hashtable<String, String>();
+  chr_len=new Hashtable<String, String>();  
   String strLine;
   while ((strLine = br.readLine()) != null)   
     {
@@ -163,7 +163,7 @@ public void paint (Graphics g) {
     Font font1 = new Font("Helvetica", Font.PLAIN,  10);
     g.setFont(font1);
 
-    Hashtable lstart=new Hashtable();
+    Hashtable<String, Integer> lstart=new Hashtable<String, Integer>();
     lstart.put(xchr.get(0),0);
     g.drawLine(hmargin,vmargin,hmargin,vmargin+(int)(unit*Double.parseDouble(chr_len.get(xchr.get(0)).toString())));
     g.drawLine(hmargin-thick,vmargin,hmargin-thick,vmargin+(int)(unit*Double.parseDouble(chr_len.get(xchr.get(0)).toString())));
@@ -183,7 +183,7 @@ public void paint (Graphics g) {
     hmargin-thick,vmargin+(int)temp+(int)(unit*Double.parseDouble(chr_len.get(xchr.get(i)).toString())));
     g.drawString(xchr.get(i),hmargin-thick-30,vmargin+(int)(temp+unit*Double.parseDouble(chr_len.get(xchr.get(i)).toString())/2));
     }
-    Hashtable rstart=new Hashtable();
+    Hashtable<String, Integer> rstart=new Hashtable<String, Integer>();//add object type
     rstart.put(ychr.get(0),0);
     g.drawLine(hmargin+xlen,vmargin,hmargin+xlen,vmargin+(int)(unit*Double.parseDouble(chr_len.get(ychr.get(0)).toString())));
     g.drawLine(hmargin+xlen+thick,vmargin,hmargin+xlen+thick,vmargin+(int)(unit*Double.parseDouble(chr_len.get(ychr.get(0)).toString())));
@@ -244,7 +244,7 @@ if(args.length<8)
 System.out.println("Usage: java dual_synteny_plotter -g gff_file -s synteny_file -c control_file -o output_PNG_file");
 System.exit(1);
 }
-HashMap option = new HashMap();
+HashMap<String, String> option = new HashMap<String, String>();
 int i;
 for(i=0;i<args.length/2;i++)
 {
