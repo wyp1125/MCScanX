@@ -6,8 +6,8 @@ import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 
 public class bar_plotter{
-Hashtable gene_feat;
-Hashtable chr_len;
+Hashtable<String, String> gene_feat; 
+Hashtable<String, String> chr_len;   
 Vector <Integer> index;
 Vector <String> seg_s1;
 Vector <String> seg_t1;
@@ -23,8 +23,8 @@ try{
   FileInputStream fstream = new FileInputStream(fpath);
   DataInputStream in = new DataInputStream(fstream);
   BufferedReader br = new BufferedReader(new InputStreamReader(in));
-  gene_feat=new Hashtable();
-  chr_len=new Hashtable();
+  gene_feat=new Hashtable<String, String>();
+  chr_len=new Hashtable<String, String>();  
   String strLine;
   while ((strLine = br.readLine()) != null)   
     {
@@ -181,11 +181,11 @@ public void paint (Graphics g) {
     }
     double unit=(double)(mid_y-hmargin-mid_margin)/max_len;
     int temp_h,temp_x;
-    Hashtable colr=new Hashtable();
-    Hashtable colg=new Hashtable();
-    Hashtable colb=new Hashtable();
-    Hashtable xpos=new Hashtable();
-    Hashtable ypos=new Hashtable();
+    Hashtable<String, Float> colr=new Hashtable<String, Float>();
+    Hashtable<String, Float> colg=new Hashtable<String, Float>();
+    Hashtable<String, Float> colb=new Hashtable<String, Float>();
+    Hashtable<String, Integer> xpos=new Hashtable<String, Integer>();
+    Hashtable<String, Integer> ypos=new Hashtable<String, Integer>();
     int cround=(rbars-1)/7+1;
     for(i=0;i<rbars;i++)
     {
@@ -285,7 +285,7 @@ if(args.length<8)
 System.out.println("Usage: java bar_plotter -g gff_file -s synteny_file -c control_file -o output_PNG_file");
 System.exit(1);
 }
-HashMap option = new HashMap();
+HashMap<String, String> option = new HashMap<String, String>();
 int i;
 for(i=0;i<args.length/2;i++)
 {
