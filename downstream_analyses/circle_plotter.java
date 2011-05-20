@@ -7,8 +7,8 @@ import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 
 public class circle_plotter{
-Hashtable gene_feat;
-Hashtable chr_len;
+Hashtable<String, String> gene_feat; 
+Hashtable<String, String> chr_len;   
 Vector <Integer> index;
 Vector <String> gene1;
 Vector <String> gene2;
@@ -23,8 +23,8 @@ try{
   FileInputStream fstream = new FileInputStream(fpath);
   DataInputStream in = new DataInputStream(fstream);
   BufferedReader br = new BufferedReader(new InputStreamReader(in));
-  gene_feat=new Hashtable();
-  chr_len=new Hashtable();
+  gene_feat=new Hashtable<String, String>();
+  chr_len=new Hashtable<String, String>();
   String strLine;
   while ((strLine = br.readLine()) != null)   
     {
@@ -143,9 +143,9 @@ public void paint (Graphics g) {
     }
     double unit;
     unit=(360-(double)(space*lcells))/(double)lnt;
-    Hashtable lstart=new Hashtable();
+    Hashtable<String, Double> lstart=new Hashtable<String, Double>(); 
     double temp1,temp2,temp3,temp4;
-    lstart.put(xchr.get(0),0);
+    lstart.put(xchr.get(0),(double)0); 
     g.drawArc(hmargin-thick,hmargin-thick,xdim-hmargin-hmargin+2*thick,ydim-vmargin-vmargin+2*thick,0,(int)(unit*Double.parseDouble(chr_len.get(xchr.get(0)).toString())));    
     g.drawArc(hmargin,hmargin,xdim-hmargin-hmargin,ydim-vmargin-vmargin,0,(int)(unit*Double.parseDouble(chr_len.get(xchr.get(0)).toString())));
     temp1=center_x+Math.cos(0*3.14159/180)*(radius+(double)thick);
@@ -241,7 +241,7 @@ if(args.length<8)
 System.out.println("Usage: java circle_plotter -g gff_file -s synteny_file -c control_file -o output_PNG_file");
 System.exit(1);
 }
-HashMap option = new HashMap();
+HashMap<String, String> option = new HashMap<String, String>();
 int i;
 for(i=0;i<args.length/2;i++)
 {
