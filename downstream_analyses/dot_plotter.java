@@ -6,8 +6,8 @@ import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 
 public class dot_plotter{
-Hashtable gene_feat;
-Hashtable chr_len;
+Hashtable<String, String> gene_feat; 
+Hashtable<String, String> chr_len;   
 Vector <Integer> index;
 Vector <String> gene1;
 Vector <String> gene2;
@@ -21,8 +21,8 @@ try{
   FileInputStream fstream = new FileInputStream(fpath);
   DataInputStream in = new DataInputStream(fstream);
   BufferedReader br = new BufferedReader(new InputStreamReader(in));
-  gene_feat=new Hashtable();
-  chr_len=new Hashtable();
+  gene_feat=new Hashtable<String, String>();
+  chr_len=new Hashtable<String, String>();  
   String strLine;
   while ((strLine = br.readLine()) != null)   
     {
@@ -143,17 +143,17 @@ public void paint (Graphics g) {
     int xcells=xchr.size();
     int ycells=ychr.size();
     int i;
-    Hashtable xstart=new Hashtable();
-    Hashtable xcelllen=new Hashtable();
-    Hashtable ystart=new Hashtable();
-    Hashtable ycelllen=new Hashtable();
+    Hashtable<String, Double> xstart=new Hashtable<String, Double>();
+    Hashtable<String, Double> xcelllen=new Hashtable<String, Double>();
+    Hashtable<String, Double> ystart=new Hashtable<String, Double>();
+    Hashtable<String, Double> ycelllen=new Hashtable<String, Double>();
     Font font1 = new Font("Helvetica", Font.PLAIN,  10);
     g.setFont(font1);
 
     if(xcells==1)
     {
-    xstart.put(xchr.get(0),0);
-    xcelllen.put(xchr.get(0),xlen);
+    xstart.put(xchr.get(0),(double)0);
+    xcelllen.put(xchr.get(0),(double)xlen);
     }
     if(xcells>1)
     {
@@ -162,7 +162,7 @@ public void paint (Graphics g) {
     {
     nt+=Double.parseDouble(chr_len.get(xchr.get(i)).toString());
     }
-    xstart.put(xchr.get(0),0);
+    xstart.put(xchr.get(0),(double)0);
     xcelllen.put(xchr.get(0),Double.parseDouble(chr_len.get(xchr.get(0)).toString())/nt*(double)xlen);
     g.drawString(xchr.get(0),(int)(hmargin+Double.parseDouble(xstart.get(xchr.get(0)).toString())+Double.parseDouble(xcelllen.get(xchr.get(0)).toString())/3),(int)(vmargin+ylen+30));
     double ns=0;
@@ -177,8 +177,8 @@ public void paint (Graphics g) {
     }
     if(ycells==1)
     {
-    ystart.put(ychr.get(0),0);
-    ycelllen.put(ychr.get(0),ylen);
+    ystart.put(ychr.get(0),(double)0);
+    ycelllen.put(ychr.get(0),(double)ylen);
     }
     if(ycells>1)
     {
@@ -188,7 +188,7 @@ public void paint (Graphics g) {
     {
     mt+=Double.parseDouble(chr_len.get(ychr.get(i)).toString());
     }
-    ystart.put(ychr.get(0),0);
+    ystart.put(ychr.get(0),(double)0);
     ycelllen.put(ychr.get(0),Double.parseDouble(chr_len.get(ychr.get(0)).toString())/mt*(double)ylen);
     g.drawString(ychr.get(0),hmargin-30, (int)(vmargin+Double.parseDouble(ystart.get(ychr.get(0)).toString())+Double.parseDouble(ycelllen.get(ychr.get(0)).toString())/2)); 
     double ms=0;
@@ -241,7 +241,7 @@ if(args.length<8)
 System.out.println("Usage: java dot_plotter -g gff_file -s synteny_file -c control_file -o output_PNG_file");
 System.exit(1);
 }
-HashMap option = new HashMap();
+HashMap<String, String> option = new HashMap<String, String>();
 int i;
 for(i=0;i<args.length/2;i++)
 {
