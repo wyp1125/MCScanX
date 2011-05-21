@@ -1,5 +1,5 @@
 #include "cls.h"
-
+/*
 void fill_allg()
 {
     Gene_feat *gf1;
@@ -10,7 +10,7 @@ void fill_allg()
         allg.insert(gf1);
     }
 }
-
+*/
 void cmpt_duptype()
 {
     int i,j;
@@ -85,7 +85,7 @@ void print_cls(char* prefix_fn)
 
 void cls_main(char* prefix_fn)
 {
-    fill_allg();
+ //   fill_allg();
     cmpt_duptype();
     print_cls(prefix_fn);
 }

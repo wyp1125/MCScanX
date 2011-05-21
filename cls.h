@@ -4,4 +4,4 @@
 
 
 vector<more_feat> gene_more;
-geneSet allg;
+//geneSet allg;

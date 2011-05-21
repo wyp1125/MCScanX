@@ -28,7 +28,7 @@ static void init_opt()
     // alignment significance
     E_VALUE = 1e-5;
     // maximum gaps allowed
-    MAX_GAPS =20;
+    MAX_GAPS =25;
     // align with a reference genome (occurs as first column in .blocks file)
     //PIVOT = "ALL";
     // this variable is dependent on gene density
@@ -48,12 +48,12 @@ static void print_help(const char *prg)
              " -s  MATCH_SIZE, number of genes required to call synteny\n"
              "     (default: %d)\n"
              " -e  E_VALUE, alignment significance (default: %lg)\n"
-             " -u  UNIT_DIST, average intergenic distance (default: %d)\n"
-             " -m  MAX_GAPS, maximum gaps(one gap=UNIT_DIST) allowed (default: %d)\n"
+            // " -u  UNIT_DIST, average intergenic distance (default: %d)\n"
+             " -m  MAX_GAPS, maximum gaps allowed (default: %d)\n"
              " -a  only builds the pairwise blocks (.synteny file)\n"
              " -b  patterns of syntenic blocks. 0:intra- and inter-species (default); 1:intra-species; 2:inter-species\n"
              " -h  print this help page\n",
-             prg, MATCH_SCORE, GAP_PENALTY, MATCH_SIZE, E_VALUE,  UNIT_DIST, MAX_GAPS);
+             prg, MATCH_SCORE, GAP_PENALTY, MATCH_SIZE, E_VALUE,   MAX_GAPS);
     exit(1);
 }
 
@@ -109,18 +109,36 @@ static void read_opt(int argc, char *argv[])
     if (optind==argc) errAbort("Please enter your input file");
     else strcpy(prefix_fn, argv[optind]);
 
-    OVERLAP_WINDOW = 5*UNIT_DIST;
-    EXTENSION_DIST = MAX_GAPS*UNIT_DIST;
+    //OVERLAP_WINDOW = 5*UNIT_DIST;
+    OVERLAP_WINDOW=5;
+    //EXTENSION_DIST = MAX_GAPS*UNIT_DIST;
     CUTOFF_SCORE = MATCH_SCORE*MATCH_SIZE;
 }
-
+void fill_allg()
+{
+    Gene_feat *gf1;
+    map<string, Gene_feat>::iterator it;
+    for (it=gene_map.begin(); it!=gene_map.end(); it++)
+    {
+        gf1 = &(it->second);
+        allg.insert(gf1);
+    }
+    int i=0;
+    geneSet::const_iterator it77=allg.begin();   
+    for (; it77!=allg.end(); it77++)
+    {
+    (*it77)->gene_id=i;
+    i++;
+    }
+}
 int main(int argc, char *argv[])
 {
     /* Start the timer */
     uglyTime(NULL);
 
     print_banner();
-    char align_fn[LABEL_LEN], block_fn[LABEL_LEN],html_fn[LABEL_LEN];
+    char align_fn[LABEL_LEN], block_fn[LABEL_LEN];
+    //html_fn[LABEL_LEN];
     FILE *fw;
 
     init_opt();
@@ -133,7 +151,7 @@ int main(int argc, char *argv[])
     fw = mustOpen(align_fn, "w");
 
     progress("%d pairwise comparisons", (int) mol_pairs.size());
-
+    fill_allg();
     map<string, int>::const_iterator ip;
     for (ip=mol_pairs.begin(); ip!=mol_pairs.end(); ip++)
     {
@@ -146,14 +164,14 @@ int main(int argc, char *argv[])
     uglyTime("Pairwise synteny written to %s", align_fn);
 
     if (IS_PAIRWISE) return 0;
-    printf("Writing multiple syntenic blocks to HTML files\n");
+ /*   printf("Writing multiple syntenic blocks to HTML files\n");
     sprintf(html_fn,"%s.html",prefix_fn);
     if (chdir(html_fn)<0)
     {
         mkdir(html_fn,S_IRWXU|S_IRGRP|S_IXGRP);
         chdir(html_fn);
-    }
-    msa_main();
+    }*/
+    msa_main(prefix_fn);
     uglyTime("Done!");
 
     return 0;

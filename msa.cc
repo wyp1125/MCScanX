@@ -6,17 +6,6 @@
 static vector <New_endpoint> endpoints;
 int max_level;
 
-void fill_allg()
-{
-    Gene_feat *gf1;
-    map<string, Gene_feat>::iterator it;
-    for (it=gene_map.begin(); it!=gene_map.end(); it++)
-    {
-        gf1 = &(it->second);
-        allg.insert(gf1);
-    }
-}
-
 void get_endpoints()
 {
     int n=seg_list.size();
@@ -155,18 +144,17 @@ void traverse()
     }
 }
 
-void mark_tandem()
+void mark_tandem(const char *prefix_fn)
 {
-    int i,j,k;
+    int i,j;
     i=0;
     geneSet::const_iterator it7=allg.begin();
     more_feat mf;
     for (; it7!=allg.end(); it7++)
     {
-        (*it7)->gene_id=i;
+        //(*it7)->gene_id=i;
         mf.depth=0;
         mf.tandem=0;
-        //mf.break_point=false;
         for (j=0;j<(*it7)->cursor.size();j++)
         {
             if ((*it7)->cursor[j]!=0)
@@ -177,6 +165,8 @@ void mark_tandem()
         gene_more.push_back(mf);
         i++;
     }
+    vector<string>tpair1;
+    vector<string>tpair2;
     map<string, Gene_feat>::iterator it8,it9;
     for (i=0;i<match_list.size();i++)
     {
@@ -186,7 +176,23 @@ void mark_tandem()
         {
             gene_more[it8->second.gene_id].tandem=1;
             gene_more[it9->second.gene_id].tandem=1;
+            tpair1.push_back(it8->second.name);
+            tpair2.push_back(it9->second.name);
         }
+    }
+    if(tpair1.size()>0)
+    {
+    ofstream result;
+    char fn[LABEL_LEN];
+    sprintf(fn,"%s.tandem",prefix_fn);
+    cout<<"Tandem pairs written to "<<fn<<endl;
+    result.open(fn,ios::out);   
+    for(i=0;i<tpair1.size();i++)
+    {
+    //cout<<tpair1[i]<<","<<tpair2[i]<<endl;
+    result<<tpair1[i]<<","<<tpair2[i]<<endl;
+    }
+    result.close();
     }
 }
 
@@ -270,12 +276,20 @@ void print_test()
 
 }
 
-void msa_main()
+void msa_main(const char *prefix_fn)
 {
     max_level=1;
-    fill_allg();
+//    fill_allg();
     get_endpoints();
     traverse();
-    mark_tandem();
+    mark_tandem(prefix_fn);
+    char html_fn[LABEL_LEN];
+    printf("Writing multiple syntenic blocks to HTML files\n");
+    sprintf(html_fn,"%s.html",prefix_fn);
+    if (chdir(html_fn)<0)
+    {
+        mkdir(html_fn,S_IRWXU|S_IRGRP|S_IXGRP);
+        chdir(html_fn);
+    }
     print_html();
 }

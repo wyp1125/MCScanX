@@ -2,7 +2,7 @@
 #define __MCSCAN_H
 
 #include "struct.h"
-#include <sys/stat.h>
+//#include <sys/stat.h>
 // read_data
 extern void read_blast(const char *prefix_fn, bool gff_flag=true);
 //extern void read_mcl(const char *prefix_fn);
@@ -13,7 +13,7 @@ extern void feed_dag (const string &mol_pair);
 
 // pog
 //extern void POG_main(FILE *fw);
-extern void msa_main();
+extern void msa_main(const char *prefix_fn);
 
 // out_utils
 extern void print_align(FILE* fw);
@@ -26,6 +26,8 @@ map<string, Gene_feat> gene_map;
 vector<Blast_record> match_list;
 vector<Seg_feat> seg_list;
 map<string, int> mol_pairs;
+geneSet allg;
+//vector<more_feat> gene_more;
 //map<string, geneSet > chr_map;
 
 /***** CONSTANTS *****/

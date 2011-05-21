@@ -26,6 +26,7 @@ map<string, double>blast_map;
 vector<Blast_record> match_list;
 vector<Seg_feat> seg_list;
 map<string, int> mol_pairs;
+geneSet allg;
 //map<string, geneSet > chr_map;
 
 /***** CONSTANTS *****/

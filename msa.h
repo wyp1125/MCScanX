@@ -1,5 +1,7 @@
 #include <iostream>
 #include <fstream>
+#include <sys/stat.h>
+
 #include "struct.h"
 
 struct New_endpoint
@@ -23,4 +25,4 @@ int depth;
 };
 */
 vector<more_feat> gene_more;
-geneSet allg;
+//geneSet allg;
