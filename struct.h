@@ -126,6 +126,8 @@ extern map<string, Gene_feat> gene_map;
 extern vector<Blast_record> match_list;
 extern vector<Seg_feat> seg_list;
 extern map<string, int> mol_pairs;
+extern geneSet allg;
+//extern vector<more_feat> gene_more;
 //extern map<string, geneSet > chr_map;
 
 /***** CONSTANTS *****/

@@ -133,12 +133,12 @@ static void print_chains(vector<Score_t>& score, const string &mol_pair)
                     //     break;
                     // if (del_x > EXTENSION_DIST || del_y > EXTENSION_DIST)
                     //     continue;
-                    if (del_x > EXTENSION_DIST)
+                    if (del_x > MAX_GAPS)
                         break;
-                    if (del_y > EXTENSION_DIST)
+                    if (del_y > MAX_GAPS)
                         continue;
-                    num_gaps = MAX(del_x, del_y)/UNIT_DIST;
-
+                    //num_gaps = MAX(del_x, del_y)/UNIT_DIST;
+                    num_gaps = MAX(del_x, del_y);
                     x = path_score[i] + score[j].score;
                     /* gap penalty */
                     if (num_gaps > 0)
