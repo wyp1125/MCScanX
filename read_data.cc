@@ -270,8 +270,8 @@ void feed_dag(const string &mol_pair)
         if (it->mol_pair != mol_pair) continue;
 
         cur_score.pairID = it->pair_id;
-        cur_score.x = gene_map[it->gene1].mid;
-        cur_score.y = gene_map[it->gene2].mid;
+        cur_score.x = gene_map[it->gene1].gene_id;
+        cur_score.y = gene_map[it->gene2].gene_id;
         cur_score.gene1=it->gene1;
         cur_score.gene2=it->gene2;
         cur_score.score = MATCH_SCORE;
