@@ -79,7 +79,7 @@ void print_cls(char* prefix_fn)
     cout<<"Singleton\t0\t"<<num[0]<<endl;
     cout<<"Dispersed\t1\t"<<num[1]<<endl;
     cout<<"Proximal\t2\t"<<num[2]<<endl;
-    cout<<"Tandme\t3\t"<<num[3]<<endl;
+    cout<<"Tandem\t3\t"<<num[3]<<endl;
     cout<<"WGD\t4\t"<<num[4]<<endl;
 }
 

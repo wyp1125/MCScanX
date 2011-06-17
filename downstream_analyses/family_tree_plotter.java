@@ -282,6 +282,13 @@ public void paint (Graphics g) {
     int x1,y1,x2,y2;
     Font font1 = new Font("Helvetica", Font.PLAIN,  font_size);
     g.setFont(font1);
+    g.drawString("Synteny",40,25);
+    g.drawString("Tandem",140,25);
+    g.setColor(Color.red);
+    g.drawLine(10,20,30,20);
+    g.setColor(Color.blue);
+    g.drawLine(110,20,130,20);
+    g.setColor(Color.black);
     for(i=0;i<norder.size();i++)
     {
     g.drawString(norder.get(i),(int)(0.7*(double)xdim),(int)(nodey.get(norder.get(i))*node_space)+vmargin+font_size/3);

@@ -8,7 +8,9 @@ void read_gff(char* path)
         exit(1);
     }
     ifstream in(path);
-    string line, word;
+    string line, word, spt;
+    vector<int> temp;
+    map<string,vector<int> >::iterator itg;
     Gene_feat gf;
     while (!in.eof())
     {
@@ -17,6 +19,17 @@ void read_gff(char* path)
             break;
         istringstream test(line);
         getline(test,gf.mol,'\t');
+///////////////////////////////////////////////////////////////
+        spt=gf.mol.substr(0,2);
+        itg=stat1.find(spt);
+        if(itg==stat1.end())
+        {
+        temp.resize(0);
+        temp.push_back(0);
+        stat1[spt]=temp;
+        stat2[spt]=temp;
+        }
+///////////////////////////////////////////////////////////////
         getline(test,gf.name,'\t');
         getline(test,word,'\t');
         istringstream int_iss(word);
@@ -165,10 +178,39 @@ void print_file(char* path)
     result.open(path,ios::out);
     Gene_feat *n;
     geneSet::iterator it6;
+    map<string, vector<int> >::iterator itp1,itp2;
+    string spt;
+    int i;
     for (it6=allg.begin();it6!=allg.end();it6++)
     {
         n=(*it6);
         result<<n->mol<<"\t"<<n->name<<"\t"<<n->in_blocks<<"\t"<<n->cr_blocks<<"\t"<<n->sp.size()<<"\t";
+////////////////////////////////////////////////////////////////////////////////////
+        spt=n->mol.substr(0,2);
+        itp1=stat1.find(spt);
+        itp2=stat2.find(spt);
+        if(n->in_blocks<itp1->second.size())
+        {
+        (itp1->second)[n->in_blocks]+=1;
+        }
+        else
+        {
+        for(i=itp1->second.size();i<n->in_blocks;i++)
+        (itp1->second).push_back(0);
+        (itp1->second).push_back(1);
+        }
+        if(n->cr_blocks<itp2->second.size())
+        {
+        (itp2->second)[n->cr_blocks]+=1;
+        }
+        else
+        {
+        for(i=itp2->second.size();i<n->cr_blocks;i++)
+        (itp2->second).push_back(0);
+        (itp2->second).push_back(1);
+        }
+
+////////////////////////////////////////////////////////////////////////////////////
         if (n->sp.size()>0)
         {
             set<string>::iterator it7;
@@ -176,6 +218,23 @@ void print_file(char* path)
                 result<<*it7<<",";
         }
         result<<endl;
+    }
+///////////////////////////////////////////////////////////////////////////////////
+    cout<<"Self-genome comparison:"<<endl<<"Reference genome\tMultiplicity level:gene number"<<endl;
+    for(itp1=stat1.begin();itp1!=stat1.end();itp1++)
+    {
+    cout<<itp1->first;
+    for(i=0;i<itp1->second.size();i++)
+    cout<<"\t"<<i<<":"<<itp1->second[i];   
+    cout<<endl;
+    }
+    cout<<"Cross-genome comparison:"<<endl<<"Reference genome\tMultiplicity level:gene number"<<endl;
+    for(itp2=stat2.begin();itp2!=stat2.end();itp2++)
+    {
+    cout<<itp2->first;
+    for(i=0;i<itp2->second.size();i++)
+    cout<<"\t"<<i<<":"<<itp2->second[i];
+    cout<<endl;
     }
 }
 

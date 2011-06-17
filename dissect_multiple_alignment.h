@@ -37,3 +37,6 @@ typedef set<Gene_feat *, geneCmp> geneSet;
 
 map<string, Gene_feat> gene_map;
 geneSet allg;
+
+map<string, vector<int> > stat1;
+map<string, vector<int> > stat2;
