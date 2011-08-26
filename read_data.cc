@@ -55,29 +55,21 @@ void read_blast(const char *prefix_fn, bool gff_flag=true)
 //    gene1=word;
         getline(test,gene2,'\t');
 //    gene2=word;
-        getline(test,word,'\t');
-        getline(test,word,'\t');
-        getline(test,word,'\t');
-        getline(test,word,'\t');
-        getline(test,word,'\t');
-        getline(test,word,'\t');
-        getline(test,word,'\t');
-        getline(test,word,'\t');
-        getline(test,word,'\t');
+        for (i = 0; i < 9; i++) getline(test, word, '\t'); // To increase legibility
         istringstream double_iss(word);
         double_iss>>evalue;
         i=gene1.compare(gene2);
-        if (i==0)
+        if (i>0)
         {
-            continue;
+            geneids=gene2+"&"+gene1;
         }
         else if (i<0)
         {
             geneids=gene1+"&"+gene2;
         }
-        else
+        else // This case is less frequent than the two previous cases.
         {
-            geneids=gene2+"&"+gene1;
+            continue;
         }
         it = blast_map.find(geneids);
         if (it==blast_map.end())
@@ -87,9 +79,7 @@ void read_blast(const char *prefix_fn, bool gff_flag=true)
         else
         {
             if (evalue<it->second)
-            {
                 it->second=evalue;
-            }
         }
         total_num++;
     }
@@ -112,11 +102,11 @@ void read_blast(const char *prefix_fn, bool gff_flag=true)
         it2 = gene_map.find(gene2);
         if (it1==gene_map.end() || it2==gene_map.end()) continue;
         gf1 = &(it1->second), gf2 = &(it2->second);
-        if (gf1->mol.empty() || gf2->mol.empty()) continue;
-        if (IN_SYNTENY==1 && gf1->mol.substr(0,2)!=gf2->mol.substr(0,2)) continue;
+        if (gf1->mol.empty() || gf2->mol.empty()) continue; // Can the mol variable be empty?
+        if (IN_SYNTENY==1 && gf1->mol.substr(0,2)!=gf2->mol.substr(0,2)) continue; 
 //        if (IN_SYNTENY==2 && gf1->mol.substr(0,2)==gf2->mol.substr(0,2)) continue;
 /////////////bug here/////////////////////////////////////////////////////////////
-        i=gf1->mol.compare(gf2->mol);
+        i=(gf1->mol).compare(gf2->mol);
 //////////////////////////////////////////////////////////////////////////////////
         if (i<0)
         {
@@ -124,7 +114,13 @@ void read_blast(const char *prefix_fn, bool gff_flag=true)
             br.gene2=gene2;
             br.mol_pair = gf1->mol+"&"+gf2->mol;
         }
-        else if (i==0)
+        else if (i > 0)
+        {
+            br.gene1=gene2;
+            br.gene2=gene1;
+            br.mol_pair = gf2->mol+"&"+gf1->mol;
+        }
+        else // This case is less frequent than the two previous cases.
         {
             if (gf1->mid<=gf2->mid)
             {
@@ -137,12 +133,6 @@ void read_blast(const char *prefix_fn, bool gff_flag=true)
                 br.gene2=gene1;
             }
             br.mol_pair = gf1->mol+"&"+gf2->mol;
-        }
-        else
-        {
-            br.gene1=gene2;
-            br.gene2=gene1;
-            br.mol_pair = gf2->mol+"&"+gf1->mol;
         }
 //////////////////////////////////////////////////////////////////////////////////
         if(IN_SYNTENY!=2||gf1->mol.substr(0,2)!=gf2->mol.substr(0,2))
@@ -169,7 +159,7 @@ void read_gff(const char *prefix_fn)
     FILE *fp = mustOpen(fn, "r");
 
     while (fscanf(fp, "%s%s%d%d",
-                  &mol[0], &gn[0], &end5, &end3) == 4)
+                  mol, gn, &end5, &end3) == 4)
     {
         gf.mol = string(mol);
         gf.name = string(gn);
@@ -286,4 +276,3 @@ void feed_dag(const string &mol_pair)
 
     dag_main(score, mol_pair);
 }
-
