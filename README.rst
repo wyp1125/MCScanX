@@ -119,7 +119,7 @@ and one directory xyz.html , containing html files that display multiple alignme
 
 MCScanX_h
 ::::::::::::::::::::::::::
-The BLASTP input of MCScanX can be replaced by a tab-delimited file containing more reliable pairwise homologous relationships. In this case, users should use MCScanX_h instead. The executation of MCScanX_h is very similar to MCScanX, except that the ".blast" file should be replaced by ".homology" file.
+The BLASTP input of MCScanX can be replaced by a tab-delimited file containing more reliable pairwise homologous relationships. In this case, users should use MCScanX_h instead. The executation of MCScanX_h is very similar to that of MCScanX, except that the "xyz.blast" file should be replaced by "xyz.homology" file. At the bottom of screen output, statistics on numbers / percentages of collinear homolog pairs are shown.
  
 Duplicate_gene_classifier
 ::::::::::::::::::::::::::
