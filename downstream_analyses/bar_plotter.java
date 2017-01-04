@@ -111,7 +111,7 @@ try{
 }
 catch (Exception e)
    {
-      System.err.println("Reading control file error: " + e.getMessage());
+      System.err.println("Reading collinearity file error: " + e.getMessage());
    }
 }
 
@@ -149,7 +149,7 @@ try{
 }
 catch (Exception e)
    {
-      System.err.println("Reading synteny error: " + e.getMessage());
+      System.err.println("Reading control file error: " + e.getMessage());
    }
 }
 public void paint (Graphics g) {
@@ -282,7 +282,7 @@ public static void main(String args[])
 {
 if(args.length<8)
 {
-System.out.println("Usage: java bar_plotter -g gff_file -s synteny_file -c control_file -o output_PNG_file");
+System.out.println("Usage: java bar_plotter -g gff_file -s collinearity_file -c control_file -o output_PNG_file");
 System.exit(1);
 }
 HashMap<String, String> option = new HashMap<String, String>();
@@ -293,7 +293,7 @@ option.put(args[2*i],args[2*i+1]);
 }
 if(!option.containsKey("-g")||!option.containsKey("-s")||!option.containsKey("-c")||!option.containsKey("-o"))
 {
-System.out.println("Usage: java bar_plotter -g gff_file -s synteny_file -c control_file -o output_PNG_file");
+System.out.println("Usage: java bar_plotter -g gff_file -s collinearity_file -c control_file -o output_PNG_file");
 System.exit(1);
 }
 bar_plotter proc=new bar_plotter();

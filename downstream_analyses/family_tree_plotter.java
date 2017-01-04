@@ -47,7 +47,7 @@ try{
 }
 catch (Exception e)
    {
-      System.err.println("Reading control file error: " + e.getMessage());
+      System.err.println("Reading tandem file error: " + e.getMessage());
    }
 }
 public void read_synteny(String fpath)
@@ -83,7 +83,7 @@ try{
 }
 catch (Exception e)
    {
-      System.err.println("Reading control file error: " + e.getMessage());
+      System.err.println("Reading collinearity file error: " + e.getMessage());
    }
 }
 public void read_tree(String fpath)
@@ -181,7 +181,7 @@ try{
   }
   catch (Exception e)
     {  
-      System.err.println("Reading gff error: " + e.getMessage());
+      System.err.println("Reading tree file error: " + e.getMessage());
     }
 }
 public void process()
@@ -282,7 +282,7 @@ public void paint (Graphics g) {
     int x1,y1,x2,y2;
     Font font1 = new Font("Helvetica", Font.PLAIN,  font_size);
     g.setFont(font1);
-    g.drawString("Synteny",40,25);
+    g.drawString("Collinear",40,25);
     g.drawString("Tandem",140,25);
     g.setColor(Color.red);
     g.drawLine(10,20,30,20);
@@ -355,7 +355,7 @@ public static void main(String args[])
 {
 if(args.length<6)
 {
-System.out.println("Usage: java family_tree_plotter -t tree_file -s synteny_file -o output_PNG_file");
+System.out.println("Usage: java family_tree_plotter -t tree_file -s collinearity_file -o output_PNG_file");
 System.out.println("optional:-x plot_width -y plot height -f font_size -d tandem_pair_file");
 System.exit(1);
 }
@@ -367,7 +367,7 @@ option.put(args[2*i],args[2*i+1]);
 }
 if(!option.containsKey("-t")||!option.containsKey("-s")||!option.containsKey("-o"))
 {
-System.out.println("Usage: java family_tree_plotter -t tree_file -s synteny_file -o output_PNG_file");
+System.out.println("Usage: java family_tree_plotter -t tree_file -s collinearity_file -o output_PNG_file");
 System.out.println("optional:-x plot_width -y plot height -f font_size -d tandem_pair_file");
 System.exit(1);
 }

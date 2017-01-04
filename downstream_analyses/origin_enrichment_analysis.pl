@@ -31,11 +31,11 @@ $num[0]=scalar keys %h,"\n";
 
 if($write_file==1)
 {
-print output "ID\tDipsersed\tProximal\tTandem\tWGD\n";
+print output "ID\tDipsersed\tProximal\tTandem\tWGD or segmental\n";
 }
 else
 {
-print "ID\tDipsersed\tProximal\tTandem\tWGD\n";
+print "ID\tDipsersed\tProximal\tTandem\tWGD or segmental\n";
 }
 
 while($line=<input1>)
