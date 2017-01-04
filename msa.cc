@@ -221,7 +221,7 @@ void print_html()
             cout<<result_dir<<endl;
             result.open(result_dir,ios::out);
             result<<"<html><table cellspacing='0' cellpadding='0' align='left'>";
-            result<<"<tr align='center'><td># of blocks</td><td>PIVOT</td><td align='left' colspan='"<<2*max_level<<"'>&nbsp;&nbsp;Syntenic blocks</td></tr>"<<endl;
+            result<<"<tr align='center'><td>Duplication depth</td><td>&nbsp;&nbsp;Reference chromosome</td><td align='left' colspan='"<<2*max_level<<"'>&nbsp;&nbsp;Collinear blocks</td></tr>"<<endl;
             prev_mol=n->mol;
 //cout<<prev_mol<<endl;
             i++;

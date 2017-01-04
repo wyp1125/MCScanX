@@ -8,12 +8,12 @@
 
  * Modified by Yupeng Wang, Mar 31, 2011
  * Code related to MCL was removed
- * Pre-processing BLAST was incorporated
+ * Reading homology was incorporated
  * Gene matches can be filtered for intra-species and inter-species
  */
 
 
-#include "read_data.h"
+#include "read_homology.h"
 
 // incremental sorting y coord
 static bool cmp_y (const Score_t& t1, const Score_t& t2)
@@ -32,19 +32,19 @@ static bool cmp_ev (const Score_t& t1, const Score_t& t2)
 // lexically sorted, gene #1 < gene #2
 // non-self blast match
 // both be present in the mcl output file and in the same group
-void read_blast(const char *prefix_fn, bool gff_flag=true)
+void read_orthomcl(const char *prefix_fn, bool gff_flag=true)
 {
 
     char fn[LABEL_LEN], g1[LABEL_LEN], g2[LABEL_LEN];
-    sprintf(fn,"%s.blast",prefix_fn);
+    sprintf(fn,"%s.homology",prefix_fn);
     ifstream in(fn);
     int i;
     int total_num=0;
-    string line,word,geneids,gene1,gene2;
+    string line,word,geneids,gene1,gene2,sp1,sp2,spc;
     double evalue;
     map<string, double>blast_map;
     map<string, double>::iterator it;
-    cout<<"Reading BLAST file and pre-processing"<<endl;
+    cout<<"Reading homologs and pre-processing"<<endl;
     while (!in.eof())
     {
         getline(in,line);
@@ -53,17 +53,18 @@ void read_blast(const char *prefix_fn, bool gff_flag=true)
         istringstream test(line);
         getline(test,gene1,'\t');
         getline(test,gene2,'\t');
-        getline(test,word,'\t');
-        getline(test,word,'\t');
-        getline(test,word,'\t');
-        getline(test,word,'\t');
-        getline(test,word,'\t');
-        getline(test,word,'\t');
-        getline(test,word,'\t');
-        getline(test,word,'\t');
+/////////////////////////////////////////////////////
+        if(e_mode!=0)
+        {
         getline(test,word,'\t');
         istringstream double_iss(word);
         double_iss>>evalue;
+        }
+        else
+        {
+        evalue=0;
+        }
+/////////////////////////////////////////////////////
         i=gene1.compare(gene2);
         if (i==0)
         {
@@ -84,7 +85,11 @@ void read_blast(const char *prefix_fn, bool gff_flag=true)
         }
         else
         {
-            if (evalue<it->second)
+            if (e_mode==1&&evalue<it->second)
+            {
+                it->second=evalue;
+            }
+            if (e_mode==2&&evalue>it->second)
             {
                 it->second=evalue;
             }
@@ -98,7 +103,7 @@ void read_blast(const char *prefix_fn, bool gff_flag=true)
     int pair_id = 0;
     map<string, Gene_feat>::iterator it1, it2;
     Gene_feat *gf1, *gf2;
-    cout<<"Generating BLAST list"<<endl;
+    cout<<"Generating homolog list"<<endl;
     for (it=blast_map.begin();it!=blast_map.end();it++)
     {
         istringstream test(it->first);
@@ -109,7 +114,9 @@ void read_blast(const char *prefix_fn, bool gff_flag=true)
         if (it1==gene_map.end() || it2==gene_map.end()) continue;
         gf1 = &(it1->second), gf2 = &(it2->second);
         if (gf1->mol.empty() || gf2->mol.empty()) continue;
-        if (IN_SYNTENY==1 && gf1->mol.substr(0,2)!=gf2->mol.substr(0,2)) continue;
+        sp1=gf1->mol.substr(0,2);
+        sp2=gf2->mol.substr(0,2);
+        if (IN_SYNTENY==1 && sp1!=sp2) continue;
 /////////////bug here/////////////////////////////////////////////////////////////
         i=gf1->mol.compare(gf2->mol);
 //////////////////////////////////////////////////////////////////////////////////
@@ -140,17 +147,18 @@ void read_blast(const char *prefix_fn, bool gff_flag=true)
             br.mol_pair = gf2->mol+"&"+gf1->mol;
         }
 //////////////////////////////////////////////////////////////////////////////////
-        if(IN_SYNTENY!=2||gf1->mol.substr(0,2)!=gf2->mol.substr(0,2))
+        if(IN_SYNTENY!=2||sp1!=sp2)
+        {
         mol_pairs[br.mol_pair]++;
-
+        spc=sp1+"&"+sp2; 
+        cmp_sp[spc].all_num++;
+        }
         br.pair_id = pair_id++;
         br.score = it->second;
         match_list.push_back(br);
-
     }
-
     int selected_num = match_list.size();
-    progress("%d matches imported (%d discarded)",
+    progress("%d homologous pairs imported (%d discarded)",
              selected_num, total_num - selected_num);
 }
 
@@ -195,8 +203,10 @@ static void filter_matches_x ()
                 (it->y - prev_rec->y) > OVERLAP_WINDOW)
         {
             // record last match_bin, take only least e-value
-            score_cpy.push_back(*min_element(match_bin.begin(),
-                                             match_bin.end(), cmp_ev));
+            if(e_mode==1)
+            score_cpy.push_back(*min_element(match_bin.begin(),match_bin.end(), cmp_ev));
+            else
+            score_cpy.push_back(*max_element(match_bin.begin(),match_bin.end(), cmp_ev));
             // start a new match_bin
             match_bin.clear();
         }
@@ -204,8 +214,10 @@ static void filter_matches_x ()
         prev_rec = it;
     }
     // don't forget the last match_bin
-    score_cpy.push_back(*min_element(match_bin.begin(),
-                                     match_bin.end(), cmp_ev));
+    if(e_mode==1)
+    score_cpy.push_back(*min_element(match_bin.begin(),match_bin.end(), cmp_ev));
+    else
+    score_cpy.push_back(*max_element(match_bin.begin(),match_bin.end(), cmp_ev));
     match_bin.clear();
 
     // copy into score
@@ -231,8 +243,10 @@ static void filter_matches_y ()
                 (it->x - prev_rec->x) > OVERLAP_WINDOW)
         {
             // record last match_bin, take only least e-value
-            score_cpy.push_back(*min_element(match_bin.begin(),
-                                             match_bin.end(), cmp_ev));
+            if(e_mode==1)
+            score_cpy.push_back(*min_element(match_bin.begin(),match_bin.end(), cmp_ev));
+            else
+            score_cpy.push_back(*max_element(match_bin.begin(),match_bin.end(), cmp_ev));
             // start a new match_bin
             match_bin.clear();
         }
@@ -240,8 +254,10 @@ static void filter_matches_y ()
         prev_rec = it;
     }
     // don't forget the last match_bin
-    score_cpy.push_back(*min_element(match_bin.begin(),
-                                     match_bin.end(), cmp_ev));
+    if(e_mode==1)
+    score_cpy.push_back(*min_element(match_bin.begin(),match_bin.end(), cmp_ev));
+    else
+    score_cpy.push_back(*max_element(match_bin.begin(),match_bin.end(), cmp_ev));
     match_bin.clear();
 
     // copy into score
@@ -275,8 +291,8 @@ void feed_dag(const string &mol_pair)
 
     // sort by both axis and remove redundant matches within
     // a given window length (default 50kb)
-    filter_matches_x();
-    filter_matches_y();
+    //filter_matches_x();
+    //filter_matches_y();
 
     dag_main(score, mol_pair);
 }

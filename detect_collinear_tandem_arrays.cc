@@ -1,4 +1,4 @@
-#include "detect_syntenic_tandem_arrays.h"
+#include "detect_collinear_tandem_arrays.h"
 
 void read_gff(char* path)
 {
@@ -194,7 +194,7 @@ void read_synteny(char* path)
 {
     if (!ifstream(path))
     {
-        cout<<"Cannot read synteny_file!"<<endl;
+        cout<<"Cannot read collinearity_file!"<<endl;
         exit(1);
     }
     string gene1,gene2;
@@ -277,13 +277,13 @@ int main(int argc, char *argv[])
 {
     if (argc < 9)
     {
-        cout<<"Usage: ./detect_syntenic_tandem_arrays -g gff_file -b blast_file -s synteny_file -o output_file"<<endl;
+        cout<<"Usage: ./detect_collinear_tandem_arrays -g gff_file -b blast_file -c collinearity_file -o output_file"<<endl;
         exit(1);
     }
     char gpath[200], bpath[200], spath[200], opath[200];
     int c,e_g,e_b,e_s,e_o;
     e_g=e_b=e_s=e_o=1;
-    while ((c = getopt(argc, argv, "g:b:s:o:")) != -1)
+    while ((c = getopt(argc, argv, "g:b:c:o:")) != -1)
     {
         switch (c)
         {
@@ -295,7 +295,7 @@ int main(int argc, char *argv[])
             sprintf(bpath,"%s",optarg);
             e_b=0;
             break;
-        case 's':
+        case 'c':
             sprintf(spath,"%s",optarg);
             e_s=0;
             break;
@@ -304,16 +304,16 @@ int main(int argc, char *argv[])
             e_o=0;
             break;
         case '?':
-            if (optopt!='g' || optopt!='b' || optopt!='s' ||optopt!='o')
+            if (optopt!='g' || optopt!='b' || optopt!='c' ||optopt!='o')
             {
-                cout<<"Usage: ./detect_syntenic_tandem_arrays -g gff_file -b blast_file -s synteny_file -o output_file"<<endl;
+                cout<<"Usage: ./detect_collinear_tandem_arrays -g gff_file -b blast_file -c collinearity_file -o output_file"<<endl;
             }
             break;
         }
     }
     if (e_g+e_b+e_s+e_o>0)
     {
-        cout<<"Usage: ./detect_syntenic_tandem_arrays -g gff_file -b blast_file -s synteny_file -o output_file"<<endl;
+        cout<<"Usage: ./detect_collinear_tandem_arrays -g gff_file -b blast_file -c collinearity_file -o output_file"<<endl;
         exit(1);
     }
     read_gff(gpath);

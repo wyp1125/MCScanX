@@ -74,7 +74,7 @@ void read_synteny(char* path)
 {
     if (!ifstream(path))
     {
-        cout<<"Cannot read synteny_file!"<<endl;
+        cout<<"Cannot read collinearity_file!"<<endl;
         exit(1);
     }
     int i=0;
@@ -220,7 +220,7 @@ void print_file(char* path)
         result<<endl;
     }
 ///////////////////////////////////////////////////////////////////////////////////
-    cout<<"Self-genome comparison:"<<endl<<"Reference genome\tMultiplicity level:gene number"<<endl;
+    cout<<"Self-genome comparison:"<<endl<<"Reference genome\tDuplication depth:gene number"<<endl;
     for(itp1=stat1.begin();itp1!=stat1.end();itp1++)
     {
     cout<<itp1->first;
@@ -228,7 +228,7 @@ void print_file(char* path)
     cout<<"\t"<<i<<":"<<itp1->second[i];   
     cout<<endl;
     }
-    cout<<"Cross-genome comparison:"<<endl<<"Reference genome\tMultiplicity level:gene number"<<endl;
+    cout<<"Cross-genome comparison:"<<endl<<"Reference genome\tDuplication depth:gene number"<<endl;
     for(itp2=stat2.begin();itp2!=stat2.end();itp2++)
     {
     cout<<itp2->first;
@@ -243,13 +243,13 @@ int main(int argc, char *argv[])
 //cout<<argc<<endl;
     if (argc < 7)
     {
-        cout<<"Usage: ./species_specific -g gff_file -s synteny_file -o output_file"<<endl;
+        cout<<"Usage: ./species_specific -g gff_file -c collinearity_file -o output_file"<<endl;
         exit(1);
     }
     char gpath[200], spath[200], opath[200];
     int c,e_g,e_s,e_o;
     e_g=e_s=e_o=1;
-    while ((c = getopt(argc, argv, "g:s:o:")) != -1)
+    while ((c = getopt(argc, argv, "g:c:o:")) != -1)
     {
         switch (c)
         {
@@ -257,7 +257,7 @@ int main(int argc, char *argv[])
             sprintf(gpath,"%s",optarg);
             e_g=0;
             break;
-        case 's':
+        case 'c':
             sprintf(spath,"%s",optarg);
             e_s=0;
             break;
@@ -266,16 +266,16 @@ int main(int argc, char *argv[])
             e_o=0;
             break;
         case '?':
-            if (optopt!='g' || optopt!='s' || optopt!='o')
+            if (optopt!='g' || optopt!='c' || optopt!='o')
             {
-                cout<<"Usage: ./species_specific -g gff_file -s synteny_file -o output_file"<<endl;
+                cout<<"Usage: ./species_specific -g gff_file -c collinearity_file -o output_file"<<endl;
             }
             break;
         }
     }
     if (e_g+e_s+e_o>0)
     {
-        cout<<"Usage: ./species_specific -g gff_file -s synteny_file -o output_file"<<endl;
+        cout<<"Usage: ./species_specific -g gff_file -c collinearity_file -o output_file"<<endl;
         exit(1);
     }
     read_gff(gpath);

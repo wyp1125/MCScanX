@@ -1,10 +1,14 @@
 /*
- * Author: Yupeng Wang <wyp1125@uga.edu> March 31, 2011
- * Program for classifying the duplicate genes of a genome into WGD, tandem, proximal and dispersed duplicates
- * using MCScanX as a compoment
+ * Author: Haibao Tang <bao@uga.edu> May 10, 2007
+ * Main entry point for the executable mcscan
+ *
+ * Modified by Yupeng Wang, Mar 31, 2011
+ * The parameter MAX_GAPS was added. IN_SYNTENY has 3 choices and is functional.
 */
 
-#include "dup_classifier.h"
+#include "mcscan_h.h"
+#include <iostream>
+using namespace std;
 
 static bool IS_PAIRWISE;
 static bool BUILD_MCL;
@@ -27,27 +31,30 @@ static void init_opt()
     E_VALUE = 1e-5;
     // maximum gaps allowed
     MAX_GAPS =25;
-    N_PROXIMAL =10;
     OVERLAP_WINDOW=5;
+    e_mode=0;
     IS_PAIRWISE = false;
-    IN_SYNTENY = 0;
+    IN_SYNTENY = 2;
 }
 
 static void print_help(const char *prg)
 {
-    progress("[Usage] %s prefix_fn [options]\n"
+     progress("[Usage] %s prefix_fn [options]\n"
              " -k  MATCH_SCORE, final score=MATCH_SCORE+NUM_GAPS*GAP_PENALTY\n"
              "     (default: %d)\n"
              " -g  GAP_PENALTY, gap penalty (default: %d)\n"
-             " -s  MATCH_SIZE, number of genes required to call a collinear block\n"
+             " -s  MATCH_SIZE, number of genes required to call collinear blocks\n"
              "     (default: %d)\n"
              " -e  E_VALUE, alignment significance (default: %lg)\n"
-             " -w  OVERLAP_WINDOW, maximum distance (# of genes) to collapse BLAST matches (default: %d)\n"
              " -m  MAX_GAPS, maximum gaps allowed (default: %d)\n"
-             " -n  N_PROXIMAL, maximum distance (# of genes) to call proximal (default: %d)\n"
+             " -w  OVERLAP_WINDOW, maximum distance (# of genes) to collapse BLAST matches (default: %d)\n"
+             " -a  only builds the pairwise blocks (.collinearity file)\n"
+             " -b  patterns of collinear blocks. 0:intra- and inter-species (default); 1:intra-species; 2:inter-species\n"
+             " -c  whether to consider homology scores. 0:not consider (default); 1: lower preferred; 2: higher preferred\n"
              " -h  print this help page\n",
-             prg, MATCH_SCORE, GAP_PENALTY, MATCH_SIZE, E_VALUE, OVERLAP_WINDOW, MAX_GAPS, N_PROXIMAL);
+             prg, MATCH_SCORE, GAP_PENALTY, MATCH_SIZE, E_VALUE, MAX_GAPS, OVERLAP_WINDOW);
     exit(1);
+
 }
 
 static void read_opt(int argc, char *argv[])
@@ -57,7 +64,7 @@ static void read_opt(int argc, char *argv[])
 
     if (argc < 2) print_help(argv[0]);
 
-    while ((c = getopt(argc, argv, "k:g:s:e:w:n:m:ah")) != -1)
+    while ((c = getopt(argc, argv, "k:g:s:e:b:m:w:c:ah")) != -1)
         switch (c)
         {
         case 'k':
@@ -72,17 +79,23 @@ static void read_opt(int argc, char *argv[])
         case 'e':
             E_VALUE = atof(optarg);
             break;
-        case 'w':
-            OVERLAP_WINDOW = atoi(optarg);
-            break;
-        case 'n':
-            N_PROXIMAL = atoi(optarg);
+        case 'b':
+            IN_SYNTENY = atoi(optarg);
             break;
         case 'm':
             MAX_GAPS = atoi(optarg);
             break;
+        case 'w':
+            OVERLAP_WINDOW = atoi(optarg);
+            break;
+        case 'c':
+            e_mode = atoi(optarg);
+            break;
+        case 'a':
+            IS_PAIRWISE = true;
+            break;
         case '?':
-            if (optopt=='k' || optopt=='s' || optopt=='g' || optopt=='e' || optopt=='w' || optopt=='m' || optopt=='n')
+            if (optopt=='k' || optopt=='s' || optopt=='g' || optopt=='e' || optopt=='b' || optopt=='m' || optopt=='w' || optopt=='c')
                 errAbort("Option -%c requires an argument.", optopt);
             else if (isprint (optopt))
                 errAbort("Unknown option `-%c'.", optopt);
@@ -107,28 +120,41 @@ void fill_allg()
         allg.insert(gf1);
     }
     int i=0;
-    geneSet::const_iterator it77=allg.begin();
+    geneSet::const_iterator it77=allg.begin();   
     for (; it77!=allg.end(); it77++)
     {
     (*it77)->gene_id=i;
     i++;
     }
 }
-
+void show_stat()
+{
+    map<string, ortho_stat>::iterator it19;
+    cout<<"Print statistics:"<<endl;
+    cout<<"Species\t# of collinear homolog pairs\t# of homolog pairs\tPercentage"<<endl;
+    for(it19=cmp_sp.begin();it19!=cmp_sp.end();it19++)
+    {
+    double temp=100.0*(double)it19->second.syn_num/(double)it19->second.all_num;
+    cout<<it19->first<<"\t"<<it19->second.syn_num<<"\t"<<it19->second.all_num<<"\t"<<temp<<endl;
+    }
+}
 int main(int argc, char *argv[])
 {
     /* Start the timer */
     uglyTime(NULL);
 
     print_banner();
-    char align_fn[LABEL_LEN], block_fn[LABEL_LEN],html_fn[LABEL_LEN];
+    char align_fn[LABEL_LEN], block_fn[LABEL_LEN];
     FILE *fw;
 
     init_opt();
     read_opt(argc, argv);
 
     read_gff(prefix_fn);
-    read_blast(prefix_fn);
+    read_orthomcl(prefix_fn);
+
+    sprintf(align_fn, "%s.collinearity", prefix_fn);
+    fw = mustOpen(align_fn, "w");
 
     progress("%d pairwise comparisons", (int) mol_pairs.size());
     fill_allg();
@@ -139,7 +165,19 @@ int main(int argc, char *argv[])
     }
 
     progress("%d alignments generated", (int) seg_list.size());
-    cls_main(prefix_fn);
+    print_align(fw);
+    fclose(fw);
+    uglyTime("Pairwise collinear blocks written to %s", align_fn);
+
+    if(IS_PAIRWISE)
+    {
+    show_stat();
+    return 0;
+    }
+    msa_main(prefix_fn);
+    show_stat();
+    uglyTime("Done!");
+
     return 0;
 }
 

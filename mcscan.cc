@@ -29,14 +29,9 @@ static void init_opt()
     E_VALUE = 1e-5;
     // maximum gaps allowed
     MAX_GAPS =25;
-    // align with a reference genome (occurs as first column in .blocks file)
-    //PIVOT = "ALL";
-    // this variable is dependent on gene density
-    UNIT_DIST = 10000;
-
+    OVERLAP_WINDOW=5;
     IS_PAIRWISE = false;
     IN_SYNTENY = 0;
-    //OUT_SYNTENY = false;
 }
 
 static void print_help(const char *prg)
@@ -45,15 +40,15 @@ static void print_help(const char *prg)
              " -k  MATCH_SCORE, final score=MATCH_SCORE+NUM_GAPS*GAP_PENALTY\n"
              "     (default: %d)\n"
              " -g  GAP_PENALTY, gap penalty (default: %d)\n"
-             " -s  MATCH_SIZE, number of genes required to call synteny\n"
+             " -s  MATCH_SIZE, number of genes required to call a collinear block\n"
              "     (default: %d)\n"
              " -e  E_VALUE, alignment significance (default: %lg)\n"
-            // " -u  UNIT_DIST, average intergenic distance (default: %d)\n"
              " -m  MAX_GAPS, maximum gaps allowed (default: %d)\n"
-             " -a  only builds the pairwise blocks (.synteny file)\n"
-             " -b  patterns of syntenic blocks. 0:intra- and inter-species (default); 1:intra-species; 2:inter-species\n"
+             " -w  OVERLAP_WINDOW, maximum distance (# of genes) to collapse BLAST matches (default: %d)\n"
+             " -a  only builds the pairwise blocks (.collinearity file)\n"
+             " -b  patterns of collinear blocks. 0:intra- and inter-species (default); 1:intra-species; 2:inter-species\n"
              " -h  print this help page\n",
-             prg, MATCH_SCORE, GAP_PENALTY, MATCH_SIZE, E_VALUE,   MAX_GAPS);
+             prg, MATCH_SCORE, GAP_PENALTY, MATCH_SIZE, E_VALUE, MAX_GAPS, OVERLAP_WINDOW);
     exit(1);
 }
 
@@ -64,7 +59,7 @@ static void read_opt(int argc, char *argv[])
 
     if (argc < 2) print_help(argv[0]);
 
-    while ((c = getopt(argc, argv, "k:g:s:e:p:u:b:m:ah")) != -1)
+    while ((c = getopt(argc, argv, "k:g:s:e:b:m:w:ah")) != -1)
         switch (c)
         {
         case 'k':
@@ -79,23 +74,20 @@ static void read_opt(int argc, char *argv[])
         case 'e':
             E_VALUE = atof(optarg);
             break;
-            // case 'p':
-            //     PIVOT = string(optarg);
-            //     break;
-        case 'u':
-            UNIT_DIST = atoi(optarg);
-            break;
         case 'b':
             IN_SYNTENY = atoi(optarg);
             break;
         case 'm':
             MAX_GAPS = atoi(optarg);
             break;
+        case 'w':
+            OVERLAP_WINDOW = atoi(optarg);
+            break;
         case 'a':
             IS_PAIRWISE = true;
             break;
         case '?':
-            if (optopt=='k' || optopt=='s' || optopt=='g' || optopt=='e' || optopt=='u' || optopt=='b' || optopt=='m')
+            if (optopt=='k' || optopt=='s' || optopt=='g' || optopt=='e' || optopt=='b' || optopt=='m' || optopt=='w')
                 errAbort("Option -%c requires an argument.", optopt);
             else if (isprint (optopt))
                 errAbort("Unknown option `-%c'.", optopt);
@@ -109,9 +101,7 @@ static void read_opt(int argc, char *argv[])
     if (optind==argc) errAbort("Please enter your input file");
     else strcpy(prefix_fn, argv[optind]);
 
-    //OVERLAP_WINDOW = 5*UNIT_DIST;
-    OVERLAP_WINDOW=5;
-    //EXTENSION_DIST = MAX_GAPS*UNIT_DIST;
+    //OVERLAP_WINDOW=5;
     CUTOFF_SCORE = MATCH_SCORE*MATCH_SIZE;
 }
 void fill_allg()
@@ -138,7 +128,6 @@ int main(int argc, char *argv[])
 
     print_banner();
     char align_fn[LABEL_LEN], block_fn[LABEL_LEN];
-    //html_fn[LABEL_LEN];
     FILE *fw;
 
     init_opt();
@@ -147,7 +136,7 @@ int main(int argc, char *argv[])
     read_gff(prefix_fn);
     read_blast(prefix_fn);
 
-    sprintf(align_fn, "%s.synteny", prefix_fn);
+    sprintf(align_fn, "%s.collinearity", prefix_fn);
     fw = mustOpen(align_fn, "w");
 
     progress("%d pairwise comparisons", (int) mol_pairs.size());
@@ -161,16 +150,9 @@ int main(int argc, char *argv[])
     progress("%d alignments generated", (int) seg_list.size());
     print_align(fw);
     fclose(fw);
-    uglyTime("Pairwise synteny written to %s", align_fn);
+    uglyTime("Pairwise collinear blocks written to %s", align_fn);
 
     if (IS_PAIRWISE) return 0;
- /*   printf("Writing multiple syntenic blocks to HTML files\n");
-    sprintf(html_fn,"%s.html",prefix_fn);
-    if (chdir(html_fn)<0)
-    {
-        mkdir(html_fn,S_IRWXU|S_IRGRP|S_IXGRP);
-        chdir(html_fn);
-    }*/
     msa_main(prefix_fn);
     uglyTime("Done!");
 

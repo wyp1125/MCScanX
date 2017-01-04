@@ -68,7 +68,7 @@ struct Gene_feat
 //   more_feat *m;
     bool operator < (const Gene_feat &g) const
     {
-        return (mol == g.mol && mid < g.mid) || mol < g.mol;
+        return (mol == g.mol && mid < g.mid) || mol < g.mol || (mol == g.mol && mid == g.mid && name.compare(g.name)<0);
     }
 };
 
@@ -76,7 +76,7 @@ struct geneCmp
 {
     bool operator() (const Gene_feat *a, const Gene_feat *b) const
     {
-        return (a->mol == b->mol && a->mid < b->mid) || a->mol < b->mol;
+        return (a->mol == b->mol && a->mid < b->mid) || a->mol < b->mol || (a->mol == b->mol && a->mid == b->mid && a->name.compare(b->name)<0);
     }
 };
 
@@ -120,6 +120,14 @@ struct Path_t
     int rc;  // sum of row and column of last entry
     int sub;
 };
+//////for MCScanX_orthomcl////////////////
+struct ortho_stat
+{
+    int all_num;
+    int syn_num;
+};
+extern map<string, ortho_stat> cmp_sp;
+/////////////////////////////////////////
 
 extern map<string, Gene_feat> gene_map;
 //extern map<string, double>blast_map;
@@ -145,15 +153,16 @@ extern double E_VALUE;
 // maximum gaps allowed
 extern int MAX_GAPS;
 // reference genome
-extern string PIVOT;
+//extern string PIVOT;
 // intergenic distance
-extern int UNIT_DIST;
+//extern int UNIT_DIST;
 // segment extension limit
-extern int EXTENSION_DIST;
+//extern int EXTENSION_DIST;
 // alignment significance score
 extern int CUTOFF_SCORE;
 extern int IN_SYNTENY;
 extern int N_PROXIMAL;
+extern int e_mode;
 // direction in the 2d dynamic matrix
 enum { DIAG, UP, LEFT, DEL };
 

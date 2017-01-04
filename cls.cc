@@ -30,11 +30,15 @@ void cmpt_duptype()
     {
         it8=gene_map.find(match_list[i].gene1);
         it9=gene_map.find(match_list[i].gene2);
+        if(gene_more[it8->second.gene_id].tandem<1)
         gene_more[it8->second.gene_id].tandem=1;
+        if(gene_more[it9->second.gene_id].tandem<1)
         gene_more[it9->second.gene_id].tandem=1;
         if (fabs(it8->second.gene_id-it9->second.gene_id)<N_PROXIMAL&&it8->second.mol==it9->second.mol)
-        {
+        {   
+            if(gene_more[it8->second.gene_id].tandem<2)
             gene_more[it8->second.gene_id].tandem=2;
+            if(gene_more[it9->second.gene_id].tandem<2)
             gene_more[it9->second.gene_id].tandem=2;
             if (fabs(it8->second.gene_id-it9->second.gene_id)==1)
             {
@@ -80,7 +84,7 @@ void print_cls(char* prefix_fn)
     cout<<"Dispersed\t1\t"<<num[1]<<endl;
     cout<<"Proximal\t2\t"<<num[2]<<endl;
     cout<<"Tandem\t3\t"<<num[3]<<endl;
-    cout<<"WGD\t4\t"<<num[4]<<endl;
+    cout<<"WGD or segmental\t4\t"<<num[4]<<endl;
 }
 
 void cls_main(char* prefix_fn)

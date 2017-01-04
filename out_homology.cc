@@ -16,9 +16,10 @@ void print_align(FILE* fw)
     int i, j, pid;
     int nseg = seg_list.size(), nanchor;
     Seg_feat *s;
+    string sp1,sp2,spc;
 
     print_params(fw);
-//////////////////////////////////////////////////
+    //////////////////////////////////////////////////
     set<string> colgenes;
     for (i=0; i<nseg; i++)
     {
@@ -37,6 +38,8 @@ void print_align(FILE* fw)
     fprintf(fw,"# Number of all genes: %d\n", (int)gene_map.size());
     fprintf( fw, "##########################################\n");
 //////////////////////////////////////////////////
+
+
     for (i=0; i<nseg; i++)
     {
         s = &seg_list[i];
@@ -44,6 +47,11 @@ void print_align(FILE* fw)
         fprintf(fw, "## Alignment %d: score=%.1f e_value=%.2g N=%d %s %s\n",
                 i, s->score, s->e_value, nanchor, s->mol_pair.c_str(),
                 s->sameStrand?"plus":"minus");
+        sp1=(s->s1)->mol.substr(0,2);
+        sp2=(s->s2)->mol.substr(0,2);
+        spc=sp1+"&"+sp2; 
+        cmp_sp[spc].syn_num+=nanchor;
+        
         for (j=0; j<nanchor; j++)
         {
             pid = s->pids[j];
@@ -60,9 +68,12 @@ void print_params(FILE *fw)
     fprintf( fw, "############### Parameters ###############\n");
     fprintf( fw, "# MATCH_SCORE: %d\n", MATCH_SCORE );
     fprintf( fw, "# MATCH_SIZE: %d\n", MATCH_SIZE );
+    //fprintf( fw, "# UNIT_DIST: %d\n", UNIT_DIST );
     fprintf( fw, "# GAP_PENALTY: %d\n", GAP_PENALTY );
     fprintf( fw, "# OVERLAP_WINDOW: %d\n", OVERLAP_WINDOW );
+    //fprintf( fw, "# EXTENSION_DIST: %d\n", EXTENSION_DIST );
     fprintf( fw, "# E_VALUE: %lg\n", E_VALUE );
     fprintf( fw, "# MAX GAPS: %d\n", MAX_GAPS );
+    //fprintf( fw, "##########################################\n\n");
 }
 
