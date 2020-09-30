@@ -1,4 +1,5 @@
 #include "detect_collinear_tandem_arrays.h"
+#include <getopt.h>
 
 void read_gff(char* path)
 {
