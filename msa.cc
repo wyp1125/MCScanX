@@ -2,6 +2,7 @@
  * This is the new code for generating and printing multiple alignment based on progressive alignment 
 */
 #include "msa.h"
+#include <unistd.h>
 
 static vector <New_endpoint> endpoints;
 int max_level;
