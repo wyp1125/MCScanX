@@ -52,7 +52,7 @@ static bool is_significant(Seg_feat *sf, vector<Score_t>& score)
     vector<Score_t>::const_iterator it;
     for (it=score.begin(); it!=score.end(); it++)
     {
-        if (it->x >=s1_a && it->x <=s1_b && it->y >=s2_a && it->y <=s2_b)
+        if (it->x_mid >=s1_a && it->x_mid <=s1_b && it->y_mid >=s2_a && it->y_mid <=s2_b)
             N++;
     }
 
