@@ -105,6 +105,7 @@ struct Score_t
 {
     int pairID;  // identifier of match pair
     int x, y;  // x,y coordinates
+    int x_mid, y_mid;
     float score;
     string gene1;
     string gene2;
