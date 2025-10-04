@@ -2,6 +2,9 @@ MCScanX
 =========
 
 :License: `BSD <http://creativecommons.org/licenses/BSD/>`_
+Notice
+---------
+The original authors are collaborating with Dr. Xi Zhang at Dalhousie University to maintain the MCScanX software. Dr. Zhang has developed a utility tool, MCScanX_Assistant, which streamlines data preparation and simplifies the installation process for MCScanX.
 
 .. contents ::
 
