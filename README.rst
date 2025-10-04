@@ -5,6 +5,7 @@ MCScanX
 Notice
 ---------
 The original authors are collaborating with Dr. Xi Zhang at Dalhousie University to maintain the MCScanX software. Dr. Zhang has developed a utility tool, `MCScanX_Assistant <https://github.com/zx0223winner/MCScanX_Assistant>`_, which streamlines data preparation and simplifies the installation process for MCScanX.
+Contact: Xi.Zhang@dal.ca
 
 Overview
 ---------
@@ -19,7 +20,7 @@ All programs are executed using command line options on Linux systems or Mac OS.
         :alt: MCScanX flow chart
  
 All code is copiable, distributable, modifiable, and usable without any restrictions.
-Contact: Yupeng Wang, wyp1125@uga.edu; Xu Tan, tanxu87@gmail.com
+Contact: Xi Zhang, Xi.Zhang@dal.ca; Yupeng Wang, wyp1125@gmail.com
 
 Installation
 -------------
