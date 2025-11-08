@@ -1,3 +1,12 @@
+
+
+.. image:: https://img.shields.io/badge/BSD_2_Clause-license-blue
+   :target: https://opensource.org/license/bsd-2-clause
+
+.. image:: http://img.shields.io/badge/run%20with-conda-3EB049?labelColor=000000&logo=anaconda
+   :target: https://anaconda.org/bioconda/mcscanx
+				   
+
 MCScanX
 =========
 
