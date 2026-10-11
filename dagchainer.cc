@@ -257,6 +257,7 @@ void dag_main(vector<Score_t> &score, const string &mol_pair)
     // forward direction
     print_chains(score, mol_pair);
     // reverse complement the second coordinate set.
+    n = score.size();
     for (i=0; i<n; i++)
         score[i].y = Max_Y - score[i].y + 1;
     // reverse direction

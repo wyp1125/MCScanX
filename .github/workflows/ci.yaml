@@ -15,6 +15,9 @@ jobs:
     - name: Build
       run:  make
 
+    - name: Test
+      run: for t in tests/*.sh; do sh "$t"; done
+
   build-aarch64:
     runs-on: ubuntu-latest
 
